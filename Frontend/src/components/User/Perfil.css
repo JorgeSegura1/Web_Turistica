@@ -1,0 +1,75 @@
+.perfil-container {
+  background-color: #f8f9fa;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.perfil-container h3 {
+  font-weight: bold;
+  font-family: "Pacifico", cursive;
+  margin-bottom: 25px;
+  color: #343a40;
+}
+
+.perfil-container label {
+  font-weight: 500;
+  color: #495057;
+}
+
+.img-perfil {
+  width: 180px;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 3px solid #dee2e6;
+  transition: transform 0.3s, box-shadow 0.3s;
+  display: block;
+  margin: 0 auto 20px auto;
+}
+
+.img-perfil:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.perfil-container input[type="text"],
+.perfil-container input[type="password"],
+.perfil-container input[type="file"] {
+  border-radius: 10px;
+}
+
+.perfil-container input[type="file"] {
+  background-color: #fff;
+  border: 1px solid #ced4da;
+  padding: 6px;
+  cursor: pointer;
+}
+
+.perfil-container .btn-success,
+.perfil-container .btn-danger {
+  border-radius: 10px;
+  padding: 8px 20px;
+  margin-right: 10px;
+}
+
+@media (max-width: 768px) {
+  .perfil-container {
+    padding: 20px;
+    text-align: center;
+  }
+
+  .perfil-container form {
+    text-align: left;
+  }
+
+  .img-perfil {
+    width: 140px;
+    height: 140px;
+  }
+}
+
+.col-md-8 h4 {
+ text-align: center;
+ font-family: "Pacifico", cursive;
+}

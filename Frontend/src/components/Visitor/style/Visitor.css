@@ -1,0 +1,141 @@
+/* Fondo blanco general y estructura */
+.visitor-container {
+  background-color: white;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 0 20px;
+}
+
+/* Hero section */
+.hero-section {
+  min-height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: white;
+  padding-top: 80px; /* ya que el navbar es fijo */
+  font-family: 'Poppins', sans-serif;
+}
+
+.hero-section h1 {
+  font-weight: bold;
+  color: #ffffff;
+}
+
+.hero-section p {
+  color: #eaeaea;
+}
+
+/* Info section */
+.info-section {
+  margin-top: 600px;
+
+}
+
+
+
+.text-center h2 {
+  font-family: "Pacifico", cursive;
+  margin-top: 100%;
+  color: #333;
+}
+
+.info-section p {
+  color: #555;
+}
+
+/* TITULOS DEL CARRUSEL */
+.carousel-item h1,
+.carousel-item h3 {
+  font-family: "Pacifico", cursive;
+  color: white;
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.6); /* Mejora la legibilidad sobre fondo */
+}
+
+.carousel-item p {
+  font-family: 'Poppins', sans-serif;
+  color: white;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Botones */
+.btn-warning {
+  background-color: #ff9900;
+  border: none;
+}
+
+.btn-warning:hover {
+  background-color: #e08700;
+}
+
+.btn-light {
+  background-color: #ffffff;
+  color: #333;
+  border: 1px solid #ccc;
+}
+
+.btn-light:hover {
+  background-color: #f2f2f2;
+}
+
+/* Navbar */
+.navbar {
+  width: 100%;
+  background-color: #ff7f00;
+  padding: 15px 30px;
+  color: white;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-sizing: border-box;
+  font-family: "Pacifico", cursive;
+}
+
+.logo-navbar {
+  width: 40px;
+  height: 40px;
+}
+
+/* Footer */
+.footer-container {
+  background-color: white;
+  border-top: 2px solid #ddd;
+  color: #333;
+  padding: 2rem 0;
+}
+
+.footer-title {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  font-family: "Pacifico", cursive;
+  margin-left: 70px;
+}
+
+.footer-subtext {
+  font-size: 1rem;
+  margin-left: 70px;
+}
+
+.footer-heading {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  font-family: "Pacifico", cursive;
+  margin-left: 200px;
+}
+
+.footer-text {
+  font-size: 1rem;
+  color: #555;
+  margin-left: 200px;
+}
+
+.footer-container a {
+  text-decoration: underline;
+  color: inherit;
+}
+
+

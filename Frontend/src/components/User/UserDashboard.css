@@ -1,0 +1,74 @@
+/* Fondo blanco general */
+.visitor-container {
+    background-color: white;
+    min-height: 100vh;
+  }
+  
+  
+  /* Hero section */
+  .hero-section h1 {
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .hero-section p {
+    color: #555;
+  }
+  
+  /* Informacion section */
+  .info-section h2 {
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .info-section p {
+    color: #555;
+  }
+  
+  /* Botones personalizados si quieres más estilo */
+  .btn-warning {
+    background-color: #ff9900;
+    border: none;
+  }
+  
+  .btn-warning:hover {
+    background-color: #e08700;
+  }
+  
+  .btn-light {
+    background-color: #ffffff;
+    color: #333;
+    border: 1px solid #ccc;
+  }
+  
+  .btn-light:hover {
+    background-color: #f2f2f2;
+  
+  }
+  
+  .navbar {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #ff7f00;
+    padding: 15px 30px;
+    color: white;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-sizing: border-box;
+  }
+  
+    .logo-navbar {
+        width: 40px;
+        height: 40px;
+    }
+    
+    
+    .visitor-container {
+      max-width: 10000px;
+      margin-top: 0;
+    }
+  
+    

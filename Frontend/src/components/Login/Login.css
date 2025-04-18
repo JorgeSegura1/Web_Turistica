@@ -1,0 +1,125 @@
+/* Login.css */
+
+body {
+  margin: 0;
+  background-color: #f5f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.login-container {
+  display: flex;
+  background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+  padding: 0;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  width: 100%;
+  max-width: 900px;
+  height: 500px;
+  overflow: hidden;
+}
+
+/* Lado izquierdo con la imagen */
+.login-image {
+  width: 50%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.login-logo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* clave: para llenar todo el espacio */
+}
+
+/* Contenido del formulario */
+.login-content {
+  width: 50%;
+  padding: 40px 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: left;
+}
+
+.login-content h2 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.login-content p {
+  margin-bottom: 15px;
+  font-size: 14px;
+}
+
+.login-content form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  margin-bottom: 5px;
+  color: #444;
+  font-weight: 500;
+}
+
+.login-content input {
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 16px;
+  transition: border 0.3s ease;
+}
+
+.login-content input:focus {
+  border-color: #6b73ff;
+  outline: none;
+}
+
+.login-content button {
+  padding: 12px;
+  background-color: #6b73ff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.login-content button:hover {
+  background-color: #5964d3;
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .login-container {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .login-image,
+  .login-content {
+    width: 100%;
+    height: auto;
+  }
+
+  .login-logo {
+    height: 250px;
+  }
+}

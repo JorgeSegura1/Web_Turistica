@@ -1,0 +1,156 @@
+/* ================= HERO DE LA PÁGINA ================= */
+.sobre-hero {
+    background-image: url('/public/logo');
+    background-size: cover;
+    background-position: center;
+    padding: 80px 20px;
+    text-align: center;
+    color: white;
+  }
+  
+  /* ================= TÍTULO PRINCIPAL ================= */
+  .titulo-sobre-nosotros {
+    padding: 400px 50px 40px; /* bajamos el padding bottom */
+    text-align: center;
+    margin-bottom: 0; /* esto ayuda a evitar más espacio */
+  }
+  
+  .titulo-sobre-nosotros h1 {
+    font-family: "Pacifico", cursive;
+    font-size: 3rem;
+    color: #ff8c00;
+    
+    margin-bottom: 5px; /* si querés algo mínimo */
+  }
+  
+  .titulo-sobre-nosotros p {
+    font-family: "Poppins", sans-serif;
+    font-size: 1.2rem;
+    color: #444;
+    margin: 0 auto;
+    max-width: 600px;
+  }
+  
+  /* ================= SECCIÓN PRINCIPAL ================= */
+  .sobre-nosotros-section {
+    padding: 20px 20px 60px; /* reducido arriba */
+    margin-top: 0;
+    background-color: #ffffff;
+    display: flex;
+    justify-content: center;
+  }
+  
+  /* ================= CUADRO CENTRAL ================= */
+  .sobre-grid {
+    background-color: white;
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    max-width: 1100px;
+    width: 100%; 
+  }
+  
+  /* ================= TEXTO DE HISTORIA ================= */
+  .descripcion h2,
+  .comentarios-form h2 {
+    font-family: "Pacifico", cursive;
+    color: #000000;
+    text-align: center;
+  }
+  
+  .descripcion p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #333;
+  }
+  
+  /* ================= FORMULARIO DE COMENTARIOS ================= */
+  .comentarios-form form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .comentarios-form input,
+  .comentarios-form textarea {
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #666666;
+    border-radius: 8px;
+    font-size: 1rem;
+    background-color: #ffffff;
+  }
+  
+  .comentarios-form button {
+    background-color: #ffa600;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+  }
+  
+  .comentarios-form button:hover {
+    background-color: #a16a48;
+  }
+  
+  /* ================= RESPONSIVE ================= */
+  @media (max-width: 768px) {
+    .sobre-grid {
+      grid-template-columns: 1fr;
+      padding: 30px 20px;
+    }
+  
+    .titulo-sobre-nosotros h1 {
+      font-size: 2.2rem;
+    }
+  
+    .titulo-sobre-nosotros p {
+      font-size: 1rem;
+    }
+  }
+  
+  /* ================= FOOTER ================= */
+  .footer-container {
+    background-color: white;
+    border-top: 2px solid #ddd;
+    color: #333;
+    padding: 2rem 0;
+  }
+  
+  .footer-title {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    font-family: "Pacifico", cursive;
+    margin-left: 70px;
+  }
+  
+  .footer-subtext {
+    font-size: 1rem;
+    margin-left: 70px;
+  }
+  
+  .footer-heading {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    font-family: "Pacifico", cursive;
+    margin-left: 100px;
+  }
+  
+  .footer-text {
+    font-size: 1rem;
+    color: #555;
+    margin-left: 100px;
+  }
+  
+  .footer-container a {
+    text-decoration: underline;
+    color: inherit;
+  }
+  
