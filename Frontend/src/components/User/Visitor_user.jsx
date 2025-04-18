@@ -35,10 +35,6 @@ function Visitor_user() {
   };
 
   const viewSchedule = () => {
-    if (!userToken) {
-      alert("Debes registrarte para ver los horarios.");
-      return;
-    }
     navigate("/horarios");
   };
 
@@ -48,6 +44,7 @@ function Visitor_user() {
     navigate("/login");
   };
 
+  // Asumí que tienes una ruta /sobre-nosotros en tu App.js
   const goToAboutUs = () => {
     navigate("/sobre-nosotros");
   };

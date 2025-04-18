@@ -5,6 +5,7 @@ import Login from "./components/Login/Login.jsx";
 import Register from "./components/Login/Register";
 import SobreNosotros from "./components/Visitor/SobreNosotros";
 import Perfil from "./components/User/Perfil.jsx";
+import Horarios  from './components/User/Horarios';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/user/visitor_user" element={<Visitor_user />} />
+        <Route path="/horarios" element={<Horarios  />} />
         <Route path="/sobrenosotros" element={<SobreNosotros />} />
         <Route path="/perfil" element={<Perfil />} />
       </Routes>

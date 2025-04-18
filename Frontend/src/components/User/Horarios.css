@@ -1,0 +1,81 @@
+/* Horarios.css */
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f6f8;
+    margin: 0;
+    padding: 0;
+  }
+  
+  h2 {
+    text-align: center;
+    margin-top: 2rem;
+    color: #333;
+    font-size: 2rem;
+  }
+  
+  .vuelo-card {
+    background-color: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    margin: 1.5rem auto;
+    padding: 1.5rem;
+    max-width: 600px;
+    transition: transform 0.2s ease;
+  }
+  
+  .vuelo-card:hover {
+    transform: scale(1.02);
+  }
+  
+  .vuelo-card p {
+    margin: 0.5rem 0;
+    font-size: 1rem;
+    color: #444;
+  }
+  
+  .vuelo-card strong {
+    color: #007bff;
+  }
+  
+  button {
+    background-color: #ff4d4d;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 1rem;
+    transition: background-color 0.3s ease;
+  }
+  
+  button:hover {
+    background-color: #cc0000;
+  }
+  
+  @media screen and (max-width: 768px) {
+    .vuelo-card {
+      margin: 1rem;
+      padding: 1rem;
+    }
+  
+    h2 {
+      font-size: 1.5rem;
+    }
+  }
+
+  .form-vuelo {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 30px;
+    max-width: 400px;
+  }
+  
+  .form-vuelo input,
+  .form-vuelo button {
+    padding: 8px;
+    font-size: 16px;
+  }
+  
