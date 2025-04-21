@@ -3,14 +3,14 @@ const db = require('../config/db');
 
 const crearVuelo = async (req, res) => {
   try {
-    const { lugar_salida, lugar_llegada, fecha, hora, cupos } = req.body;
+    const { lugar_salida, lugar_llegada, fecha, hora, cupos, comentario } = req.body;
     const { id: instructorId, rol } = req.user;
 
     if (rol !== 'instructor') {
       return res.status(403).json({ msg: 'Solo instructores pueden crear vuelos.' });
     }
 
-    if (!lugar_salida || !lugar_llegada || !fecha || !hora || cupos == null) {
+    if (!lugar_salida || !lugar_llegada || !fecha || !hora || cupos == null || !comentario) {
       return res.status(400).json({ msg: 'Faltan campos obligatorios.' });
     }
 
@@ -26,8 +26,9 @@ const crearVuelo = async (req, res) => {
         fecha,
         hora,
         cupos,
+        comentario,
         creado_por
-      ) VALUES (?, ?, ?, ?, ?, ?)
+      ) VALUES (?, ?, ?, ?, ?, ?, ?)
     `;
     const [result] = await db.query(sql, [
       lugar_salida,
@@ -35,7 +36,9 @@ const crearVuelo = async (req, res) => {
       fecha,
       hora,
       cuposInt,
+      comentario,
       instructorId
+      
     ]);
 
     res.status(201).json({
@@ -63,4 +66,40 @@ const obtenerVuelos = async (req, res) => {
   }
 };
 
-module.exports = { crearVuelo, obtenerVuelos };
+const deleteVuelo = async (req, res) => {
+  // Obtenemos el rol desde el token
+  const { rol } = req.user;
+  const { id } = req.params;
+
+  // Sólo administradores pueden borrar
+  if (rol !== 'administrador') {
+    return res
+      .status(403)
+      .json({ msg: 'Solo administradores pueden eliminar vuelos.' });
+  }
+
+  try {
+    // Ejecutamos el DELETE en la tabla
+    const [result] = await db.query(
+      'DELETE FROM vuelos WHERE id = ?',
+      [id]
+    );
+
+    // Si no afectó filas, el vuelo no existía
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ msg: 'Vuelo no encontrado.' });
+    }
+
+    // Eliminación exitosa
+    return res.json({ msg: 'Vuelo eliminado correctamente.' });
+  } catch (err) {
+    console.error('Error en deleteVuelo:', err);
+    return res.status(500).json({ msg: 'Error interno del servidor.' });
+  }
+};
+
+module.exports = {
+  crearVuelo,
+  obtenerVuelos,
+  deleteVuelo,    // <-- exportamos el nuevo handler
+};

@@ -1,10 +1,15 @@
 // backend/routes/inscripcion.routes.js
 const express = require('express');
-const router = express.Router();
 const { verifyToken } = require('../middleware/auth');
-const { createInscripcion } = require('../controllers/inscripcion.controller');
+const { inscribirVuelo } = require('../controllers/inscripcion.controller');
+const router = express.Router();
 
-// POST /api/inscripcion
-router.post('/', verifyToken, createInscripcion);
+// Ruta de diagnóstico
+router.get('/_test', (req, res) => {
+  return res.json({ ruta: 'inscripciones funcionando' });
+});
+
+// POST /api/inscripciones/:vueloId
+router.post('/:vueloId', verifyToken, inscribirVuelo);
 
 module.exports = router;

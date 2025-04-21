@@ -1,28 +1,20 @@
 // backend/routes/vuelos.routes.js
 const express = require('express');
-const router  = express.Router();
-
+const router = express.Router();
 const { verifyToken } = require('../middleware/auth');
-const { crearVuelo, obtenerVuelos } = require('../controllers/vuelos.controller');
 const {
-  crearComentario,
-  obtenerComentariosVuelo
-} = require('../controllers/comentarios.controller');
+  crearVuelo,
+  obtenerVuelos,
+  deleteVuelo         // <— importamos
+} = require('../controllers/vuelos.controller');
 
-// Rutas de vuelos
+// Listar vuelos
+router.get('/', verifyToken, obtenerVuelos);
+
+// Crear vuelo (instructor)
 router.post('/', verifyToken, crearVuelo);
-router.get('/',  verifyToken, obtenerVuelos);
 
-// Rutas de comentarios sobre un vuelo
-router.post(
-  '/:vueloId/comentarios',
-  verifyToken,
-  crearComentario
-);
-router.get(
-  '/:vueloId/comentarios',
-  verifyToken,             // opcional si quieres que cualquiera vea comentarios
-  obtenerComentariosVuelo
-);
+// Eliminar vuelo (administrador)
+router.delete('/:id', verifyToken, deleteVuelo);
 
 module.exports = router;
