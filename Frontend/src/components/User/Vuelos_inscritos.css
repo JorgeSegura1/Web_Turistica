@@ -1,0 +1,93 @@
+.vuelos-inscritos-container {
+  width: 100vw; /* Asegura que ocupe todo el ancho de la ventana */
+  min-height: 100vh; /* Asegura que ocupe toda la altura de la pantalla */
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+.navbar {
+  width: 100vw; /* Asegura que ocupe todo el ancho de la ventana */
+  margin: 0; /* Elimina cualquier margen no deseado */
+  padding: 15px 30px;
+  background-color: #ff7f00;
+  color: white;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-sizing: border-box; /* Asegura que el padding no afecte el ancho */
+}
+
+.navbar-left {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-right .btn-light {
+  margin-left: 10px; /* Espaciado entre los botones */
+}
+
+.logo-navbar {
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+}
+
+.titulo{
+  margin-top: 50px;
+}
+
+.vuelos-list-container {
+  width: 100%;
+  max-width: 1200px;
+  margin-top: 20px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  overflow-y: auto;
+  max-height: 60vh;
+}
+
+.vuelos-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.vuelo-card {
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.vuelo-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.vuelo-card p {
+  margin: 8px 0;
+  color: #555;
+  line-height: 1.4;
+}
+
+.vuelo-card p strong {
+  color: #0077cc;
+}

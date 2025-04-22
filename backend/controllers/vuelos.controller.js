@@ -1,56 +1,6 @@
 // backend/controllers/vuelos.controller.js
 const db = require('../config/db');
 
-const crearVuelo = async (req, res) => {
-  try {
-    const { lugar_salida, lugar_llegada, fecha, hora, cupos, comentario } = req.body;
-    const { id: instructorId, rol } = req.user;
-
-    if (rol !== 'instructor') {
-      return res.status(403).json({ msg: 'Solo instructores pueden crear vuelos.' });
-    }
-
-    if (!lugar_salida || !lugar_llegada || !fecha || !hora || cupos == null || !comentario) {
-      return res.status(400).json({ msg: 'Faltan campos obligatorios.' });
-    }
-
-    const cuposInt = parseInt(cupos, 10);
-    if (isNaN(cuposInt) || cuposInt <= 0) {
-      return res.status(400).json({ msg: 'Cupos inválidos.' });
-    }
-
-    const sql = `
-      INSERT INTO vuelos (
-        lugar_salida,
-        lugar_llegada,
-        fecha,
-        hora,
-        cupos,
-        comentario,
-        creado_por
-      ) VALUES (?, ?, ?, ?, ?, ?, ?)
-    `;
-    const [result] = await db.query(sql, [
-      lugar_salida,
-      lugar_llegada,
-      fecha,
-      hora,
-      cuposInt,
-      comentario,
-      instructorId
-      
-    ]);
-
-    res.status(201).json({
-      msg: 'Vuelo creado exitosamente.',
-      id: result.insertId
-    });
-  } catch (error) {
-    console.error('Error al crear vuelo:', error);
-    res.status(500).json({ msg: 'Error en el servidor.' });
-  }
-};
-
 const obtenerVuelos = async (req, res) => {
   try {
     const [vuelos] = await db.query(`
@@ -66,40 +16,46 @@ const obtenerVuelos = async (req, res) => {
   }
 };
 
+const crearVuelo = async (req, res) => {
+  try {
+    const { lugar_salida, lugar_llegada, fecha, hora, cupos, comentario } = req.body;
+    const { id: instructorId, rol } = req.user;
+
+    if (rol !== 'instructor') {
+      return res.status(403).json({ msg: 'Solo instructores pueden crear vuelos.' });
+    }
+
+    const sql = `
+      INSERT INTO vuelos (lugar_salida, lugar_llegada, fecha, hora, cupos, comentario, creado_por)
+      VALUES (?, ?, ?, ?, ?, ?, ?)
+    `;
+    const [result] = await db.query(sql, [lugar_salida, lugar_llegada, fecha, hora, cupos, comentario, instructorId]);
+
+    res.status(201).json({ msg: 'Vuelo creado exitosamente.', id: result.insertId });
+  } catch (error) {
+    console.error('Error al crear vuelo:', error);
+    res.status(500).json({ msg: 'Error en el servidor.' });
+  }
+};
+
 const deleteVuelo = async (req, res) => {
-  // Obtenemos el rol desde el token
   const { rol } = req.user;
   const { id } = req.params;
 
-  // Sólo administradores pueden borrar
   if (rol !== 'administrador') {
-    return res
-      .status(403)
-      .json({ msg: 'Solo administradores pueden eliminar vuelos.' });
+    return res.status(403).json({ msg: 'Solo administradores pueden eliminar vuelos.' });
   }
 
   try {
-    // Ejecutamos el DELETE en la tabla
-    const [result] = await db.query(
-      'DELETE FROM vuelos WHERE id = ?',
-      [id]
-    );
-
-    // Si no afectó filas, el vuelo no existía
+    const [result] = await db.query('DELETE FROM vuelos WHERE id = ?', [id]);
     if (result.affectedRows === 0) {
       return res.status(404).json({ msg: 'Vuelo no encontrado.' });
     }
-
-    // Eliminación exitosa
-    return res.json({ msg: 'Vuelo eliminado correctamente.' });
-  } catch (err) {
-    console.error('Error en deleteVuelo:', err);
-    return res.status(500).json({ msg: 'Error interno del servidor.' });
+    res.json({ msg: 'Vuelo eliminado correctamente.' });
+  } catch (error) {
+    console.error('Error al eliminar vuelo:', error);
+    res.status(500).json({ msg: 'Error en el servidor.' });
   }
 };
 
-module.exports = {
-  crearVuelo,
-  obtenerVuelos,
-  deleteVuelo,    // <-- exportamos el nuevo handler
-};
+module.exports = { obtenerVuelos, crearVuelo, deleteVuelo };

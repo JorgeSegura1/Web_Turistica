@@ -5,7 +5,7 @@ import "../User/Visitor-user.css";
 import CommentForm from '../CommentForm';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
-import Footer from "./Footer";
+import Footer from "./Footer"; // Ruta actualizada
 
 function Visitor_user() {
   const navigate = useNavigate();
@@ -41,12 +41,12 @@ function Visitor_user() {
   const logOutUser = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("role");
-    navigate("/login");
+    navigate("/Visitor");
   };
 
   // Asumí que tienes una ruta /sobre-nosotros en tu App.js
   const goToAboutUs = () => {
-    navigate("/sobre-nosotros");
+    navigate("/SobreNosotros");
   };
 
   return (

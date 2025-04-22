@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import Footer from './Footer';
+import Footer from "../User/Footer"; // Ruta actualizada
 import './SobreNosotros.css';
 
 const SobreNosotros = () => {

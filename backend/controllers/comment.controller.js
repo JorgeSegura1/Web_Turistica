@@ -6,12 +6,8 @@ exports.createComment = async (req, res) => {
     const { texto } = req.body;
     const { id: userId, rol } = req.user;
 
-    // Solo 'instructor' puede comentar
     if (rol !== 'instructor') {
       return res.status(403).json({ msg: 'Solo instructores pueden publicar comentarios.' });
-    }
-    if (!texto || texto.trim() === '') {
-      return res.status(400).json({ msg: 'El texto del comentario es obligatorio.' });
     }
 
     const sql = 'INSERT INTO comentarios (texto, creado_por) VALUES (?, ?)';
@@ -19,22 +15,16 @@ exports.createComment = async (req, res) => {
 
     res.status(201).json({
       msg: 'Comentario creado.',
-      comentario: {
-        id: result.insertId,
-        texto,
-        creado_por: userId,
-        fecha: new Date().toISOString()
-      }
+      comentario: { id: result.insertId, texto, creado_por: userId, fecha: new Date().toISOString() }
     });
   } catch (error) {
-    console.error('Error creando comentario:', error);
+    console.error('Error al crear comentario:', error);
     res.status(500).json({ msg: 'Error en el servidor.' });
   }
 };
 
 exports.getComments = async (req, res) => {
   try {
-    // opcional: podrías filtrar por vuelo, etc.
     const [rows] = await db.query(`
       SELECT c.id, c.texto, c.fecha, u.nombre, u.apellido
       FROM comentarios c
@@ -43,7 +33,7 @@ exports.getComments = async (req, res) => {
     `);
     res.json(rows);
   } catch (error) {
-    console.error('Error obteniendo comentarios:', error);
+    console.error('Error al obtener comentarios:', error);
     res.status(500).json({ msg: 'Error en el servidor.' });
   }
 };

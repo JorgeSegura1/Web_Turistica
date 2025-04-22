@@ -1,0 +1,25 @@
+.navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background-color: #ff7f00;
+  padding: 15px 30px;
+  color: white;
+  z-index: 1000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.logo-navbar {
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+}
+
+.navbar-brand {
+  font-weight: bold;
+  font-size: 1.2rem;
+  cursor: pointer;
+}

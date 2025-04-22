@@ -4,7 +4,7 @@ import axios from "axios";
 import "../Visitor/style/visitor.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
-import Footer from "./Footer";
+import Footer from "../User/Footer"; // Ruta actualizada
 
 function Visitor() {
   const navigate = useNavigate();

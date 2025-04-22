@@ -5,7 +5,7 @@ const { verifyToken } = require('../middleware/auth');
 const {
   crearVuelo,
   obtenerVuelos,
-  deleteVuelo         // <— importamos
+  deleteVuelo
 } = require('../controllers/vuelos.controller');
 
 // Listar vuelos

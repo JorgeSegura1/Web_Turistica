@@ -1,12 +1,15 @@
-// src/components/User/Horarios.jsx
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { Alert } from "react-bootstrap";
+import "bootstrap/dist/css/bootstrap.min.css";
 import "./Horarios.css";
 
 export default function Horarios() {
   const [vuelos, setVuelos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [alert, setAlert] = useState({ show: false, message: "", variant: "" });
   const [nuevoVuelo, setNuevoVuelo] = useState({
     lugar_salida: "",
     lugar_llegada: "",
@@ -18,6 +21,7 @@ export default function Horarios() {
 
   const userRole = localStorage.getItem("role");
   const token = localStorage.getItem("token");
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!token) {
@@ -25,7 +29,6 @@ export default function Horarios() {
       setLoading(false);
       return;
     }
-    
     axios
       .get("http://localhost:5000/api/vuelos", {
         headers: { Authorization: `Bearer ${token}` },
@@ -35,9 +38,9 @@ export default function Horarios() {
       .finally(() => setLoading(false));
   }, [token]);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setNuevoVuelo({ ...nuevoVuelo, [name]: value });
+  const showAlert = (message, variant) => {
+    setAlert({ show: true, message, variant });
+    setTimeout(() => setAlert({ show: false, message: "", variant: "" }), 3000);
   };
 
   const crearVuelo = async (e) => {
@@ -46,7 +49,10 @@ export default function Horarios() {
       await axios.post("http://localhost:5000/api/vuelos", nuevoVuelo, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      alert("Vuelo creado correctamente!");
+      const res = await axios.get("http://localhost:5000/api/vuelos", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setVuelos(res.data);
       setNuevoVuelo({
         lugar_salida: "",
         lugar_llegada: "",
@@ -55,122 +61,160 @@ export default function Horarios() {
         cupos: 30,
         comentario: "",
       });
-      const res = await axios.get("http://localhost:5000/api/vuelos", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setVuelos(res.data);
-    } catch (err) {
-      console.error(err);
-      alert("Error al crear vuelo.");
+      showAlert("Vuelo creado exitosamente.", "success");
+    } catch {
+      showAlert("Error al crear el vuelo.", "danger");
     }
   };
 
   const eliminarVuelo = async (id) => {
-    if (userRole !== "administrador") return;
     try {
       await axios.delete(`http://localhost:5000/api/vuelos/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setVuelos((v) => v.filter((x) => x.id !== id));
-    } catch (err) {
-      console.error(err);
-      alert("No se pudo eliminar.");
+      setVuelos((v) => v.filter((vuelo) => vuelo.id !== id));
+      showAlert("Vuelo eliminado exitosamente.", "success");
+    } catch {
+      showAlert("Error al eliminar el vuelo.", "danger");
     }
   };
 
-  const inscribirVuelo = async (vueloId) => {
-    if (userRole !== "publico") {
-      alert("Solo usuarios públicos pueden inscribirse.");
-      return;
-    }
+  const inscribirVuelo = async (id) => {
     try {
       await axios.post(
-        `http://localhost:5000/api/inscripciones/${vueloId}`,
+        `http://localhost:5000/api/inscripciones/${id}`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      alert("Inscripción realizada con éxito!");
-      // refrescar vuelos para mostrar cupos actualizados
       const res = await axios.get("http://localhost:5000/api/vuelos", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setVuelos(res.data);
-    } catch (err) {
-      console.error(err);
-      alert(err.response?.data?.msg || "Error al inscribirse.");
+      showAlert("Inscripción realizada con éxito.", "success");
+    } catch {
+      showAlert("Error al inscribirse en el vuelo.", "danger");
     }
   };
 
+  const logOutUser = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("role");
+    navigate("/Visitor");
+  };
+
+  const viewInscribedFlights = () => navigate("/vuelos_inscritos");
+
   if (loading) return <p>Cargando horarios…</p>;
-  if (error) return <p>Error al cargar horarios: {error.message}</p>;
+  if (error) return <p>Error al cargar: {error.message}</p>;
 
   return (
-    <div
-      className={`horarios-container ${
-        userRole === "instructor" ? "with-form" : "without-form"
-      }`}
-    >
-      <h2>Horarios de Vuelos</h2>
+    <>
+      <header className="navbar fixed-top">
+        <div className="navbar-left" onClick={() => navigate("/user/visitor_user")}>
+          <img
+            src="/Fotos/Parapente_logo.png"
+            alt="SkyRush Logo"
+            className="logo-navbar"
+          />
+          <span className="navbar-brand">SkyRush</span>
+        </div>
+        <div className="navbar-right">
+          {userRole === "publico" && (
+            <button
+              className="btn btn-light me-2"
+              onClick={viewInscribedFlights}
+            >
+              Mis Vuelos
+            </button>
+          )}
+          <button className="btn btn-light" onClick={logOutUser}>
+            Cerrar Sesión
+          </button>
+        </div>
+      </header>
 
-      {/* Formulario para instructores */}
-      {userRole === "instructor" && (
-        <form className="form-vuelo" onSubmit={crearVuelo}>
-          <h3>Crear nuevo vuelo</h3>
-          <input
-            type="text"
-            name="lugar_salida"
-            placeholder="Lugar de salida"
-            value={nuevoVuelo.lugar_salida}
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="text"
-            name="lugar_llegada"
-            placeholder="Lugar de llegada"
-            value={nuevoVuelo.lugar_llegada}
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="date"
-            name="fecha"
-            value={nuevoVuelo.fecha}
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="time"
-            name="hora"
-            value={nuevoVuelo.hora}
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="number"
-            name="cupos"
-            placeholder="Cupos disponibles"
-            value={nuevoVuelo.cupos}
-            onChange={handleChange}
-            required
-          />
-          <textarea
-            name="comentario"
-            placeholder="Comentario o instrucción extra"
-            value={nuevoVuelo.comentario}
-            onChange={handleChange}
-            rows={3}
-          />
-          <button type="submit">Crear Vuelo</button>
-        </form>
-      )}
+      <div className="horarios-container">
+        {userRole === "instructor" && (
+          <aside className="panel-formulario">
+            {alert.show && (
+              <Alert variant={alert.variant} className="alert-fixed">
+                {alert.message}
+              </Alert>
+            )}
+            <form className="form-vuelo" onSubmit={crearVuelo}>
+              <h3>Crear nuevo vuelo</h3>
+              <input
+                name="lugar_salida"
+                placeholder="Lugar de salida"
+                value={nuevoVuelo.lugar_salida}
+                onChange={(e) =>
+                  setNuevoVuelo({ ...nuevoVuelo, lugar_salida: e.target.value })
+                }
+                required
+              />
+              <input
+                name="lugar_llegada"
+                placeholder="Lugar de llegada"
+                value={nuevoVuelo.lugar_llegada}
+                onChange={(e) =>
+                  setNuevoVuelo({ ...nuevoVuelo, lugar_llegada: e.target.value })
+                }
+                required
+              />
+              <input
+                type="date"
+                name="fecha"
+                value={nuevoVuelo.fecha}
+                onChange={(e) =>
+                  setNuevoVuelo({ ...nuevoVuelo, fecha: e.target.value })
+                }
+                required
+              />
+              <input
+                type="time"
+                name="hora"
+                value={nuevoVuelo.hora}
+                onChange={(e) =>
+                  setNuevoVuelo({ ...nuevoVuelo, hora: e.target.value })
+                }
+                required
+              />
+              <input
+                type="number"
+                name="cupos"
+                placeholder="Cupos"
+                value={nuevoVuelo.cupos}
+                onChange={(e) =>
+                  setNuevoVuelo({ ...nuevoVuelo, cupos: e.target.value })
+                }
+                required
+              />
+              <textarea
+                name="comentario"
+                placeholder="Comentario"
+                rows={3}
+                value={nuevoVuelo.comentario}
+                onChange={(e) =>
+                  setNuevoVuelo({ ...nuevoVuelo, comentario: e.target.value })
+                }
+                className="comentario-field"
+              />
+              <button type="submit" className="btn btn-primary">
+                Crear Vuelo
+              </button>
+            </form>
+          </aside>
+        )}
 
-      <div className="vuelos-list-container">
-        <div className="vuelos-list">
-          {vuelos.length === 0 ? (
-            <p>No hay vuelos disponibles.</p>
-          ) : (
-            vuelos.map((v) => (
+        <section className="panel-lista">
+          {userRole !== "instructor" && alert.show && (
+            <Alert variant={alert.variant} className="alert-fixed">
+              {alert.message}
+            </Alert>
+          )}
+          <h2 className="titulo-centrado">Horarios de Vuelos</h2>
+          <div className="vuelos-list">
+            {vuelos.map((v) => (
               <div key={v.id} className="vuelo-card">
                 <p>
                   <strong>
@@ -184,26 +228,34 @@ export default function Horarios() {
                 <p>
                   <strong>Importante:</strong> {v.comentario}
                 </p>
-
                 {userRole === "publico" && (
                   <button
-                    className="btn-inscribirse"
+                    className="btn btn-orange mt-2"
                     onClick={() => inscribirVuelo(v.id)}
                   >
                     Inscribirse
                   </button>
                 )}
-
                 {userRole === "administrador" && (
-                  <button onClick={() => eliminarVuelo(v.id)}>
-                    Eliminar vuelo
+                  <button
+                    className="btn btn-orange"
+                    onClick={() => eliminarVuelo(v.id)}
+                  >
+                    Eliminar Vuelo
                   </button>
                 )}
               </div>
-            ))
-          )}
-        </div>
+            ))}
+          </div>
+        </section>
       </div>
-    </div>
+
+      <footer className="footer-container">
+        <div className="footer-content">
+          <p>SkyRush © 2023 - Todos los derechos reservados</p>
+          <p>Contacto: info@skyrush.com | Teléfono: +123 456 789</p>
+        </div>
+      </footer>
+    </>
   );
 }

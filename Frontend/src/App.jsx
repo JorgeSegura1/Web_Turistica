@@ -6,6 +6,7 @@ import Register from "./components/Login/Register";
 import SobreNosotros from "./components/Visitor/SobreNosotros";
 import Perfil from "./components/User/Perfil.jsx";
 import Horarios  from './components/User/Horarios';
+import VuelosInscritos from "./components/User/Vuelos_inscritos";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route path="/horarios" element={<Horarios  />} />
         <Route path="/sobrenosotros" element={<SobreNosotros />} />
         <Route path="/perfil" element={<Perfil />} />
+        <Route path="/vuelos_inscritos" element={<VuelosInscritos />} />
       </Routes>
     </Router>
   );

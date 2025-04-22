@@ -1,10 +1,10 @@
 /* Fondo blanco general y estructura */
 .visitor-container {
   background-color: white;
-  min-height: 100%;
+  min-height: 100vh; /* Ocupa toda la altura de la pantalla */
   display: flex;
   flex-direction: column;
-  padding: 0 20px;
+  padding: 0;
 }
 
 /* Hero section */
