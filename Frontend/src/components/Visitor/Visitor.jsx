@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../Visitor/style/visitor.css";
@@ -10,45 +10,27 @@ function Visitor() {
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
 
+  // Redirección automática si el usuario está autenticado
+  useEffect(() => {
+    if (token) {
+      navigate("/visitor"); // Cambia "/inicio" por tu ruta de inicio para usuarios registrados
+    }
+  }, [token, navigate]);
+
   const handleLoginClick = () => navigate("/Login");
   const handleRegisterClick = () => navigate("/register");
 
   const handleInscribirse = async (deporteId) => {
-    if (!token) {
-      alert("Debes iniciar sesión para inscribirte.");
-      navigate("/login");
-      return;
-    }
-
-    try {
-      await axios.post(
-        "http://localhost:3001/api/inscripcion",
-        { deporteId },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      alert("¡Inscripción exitosa!");
-    } catch (error) {
-      console.error("Error al inscribirse:", error);
-      alert("Error al inscribirse, intenta de nuevo.");
-    }
-  };
-
-  const handleVerHorarios = () => {
-    if (!token) {
-      alert("Debes registrarte para ver los horarios.");
-      return;
-    }
-    navigate("/horarios");
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("role");
+    alert("Debes iniciar sesión para inscribirte.");
     navigate("/login");
   };
 
+  const handleVerHorarios = () => {
+    alert("Debes registrarte para ver los horarios.");
+  };
+
   const goToSobreNosotros = () => {
-    navigate("/sobre-nosotros");
+    navigate("/sobrenosotros");
   };
 
   return (
@@ -69,20 +51,12 @@ function Visitor() {
             <span className="navbar-brand text-white fw-bold ms-2">SkyRush</span>
           </div>
           <div>
-            {token ? (
-              <button className="btn btn-light" onClick={handleLogout}>
-                Cerrar Sesión
-              </button>
-            ) : (
-              <>
-                <button className="btn btn-light me-2" onClick={handleLoginClick}>
-                  Iniciar Sesión
-                </button>
-                <button className="btn btn-light" onClick={handleRegisterClick}>
-                  Registrarse
-                </button>
-              </>
-            )}
+            <button className="btn btn-light me-2" onClick={handleLoginClick}>
+              Iniciar Sesión
+            </button>
+            <button className="btn btn-light" onClick={handleRegisterClick}>
+              Registrarse
+            </button>
           </div>
         </div>
       </header>

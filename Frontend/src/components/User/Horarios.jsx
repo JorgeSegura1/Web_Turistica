@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { Alert } from "react-bootstrap";
+import { Alert, Modal, Button, Form } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./Horarios.css";
+import Footer from "./Footer";
 
 export default function Horarios() {
   const [vuelos, setVuelos] = useState([]);
@@ -18,6 +19,10 @@ export default function Horarios() {
     cupos: 0,
     comentario: "",
   });
+
+  // Estados para edición
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editVuelo, setEditVuelo] = useState(null);
 
   const userRole = localStorage.getItem("role");
   const token = localStorage.getItem("token");
@@ -43,6 +48,7 @@ export default function Horarios() {
     setTimeout(() => setAlert({ show: false, message: "", variant: "" }), 3000);
   };
 
+  // Crear vuelo
   const crearVuelo = async (e) => {
     e.preventDefault();
     try {
@@ -67,6 +73,7 @@ export default function Horarios() {
     }
   };
 
+  // Eliminar vuelo
   const eliminarVuelo = async (id) => {
     try {
       await axios.delete(`http://localhost:5000/api/vuelos/${id}`, {
@@ -79,6 +86,7 @@ export default function Horarios() {
     }
   };
 
+  // Inscribir en vuelo
   const inscribirVuelo = async (id) => {
     try {
       await axios.post(
@@ -96,44 +104,135 @@ export default function Horarios() {
     }
   };
 
+  // Edición de vuelo (solo admin)
+  const openEditModal = (vuelo) => {
+    setEditVuelo({ ...vuelo });
+    setShowEditModal(true);
+  };
+  const closeEditModal = () => {
+    setShowEditModal(false);
+    setEditVuelo(null);
+  };
+  const handleEditChange = (e) => {
+    const { name, value } = e.target;
+    setEditVuelo({ ...editVuelo, [name]: value });
+  };
+  const submitEdit = async (e) => {
+    e.preventDefault();
+    try {
+      await axios.put(
+        `http://localhost:5000/api/vuelos/${editVuelo.id}`,
+        {
+          lugar_salida: editVuelo.lugar_salida,
+          lugar_llegada: editVuelo.lugar_llegada,
+          fecha: editVuelo.fecha,
+          hora: editVuelo.hora,
+          cupos: editVuelo.cupos,
+          comentario: editVuelo.comentario,
+        },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      const res = await axios.get("http://localhost:5000/api/vuelos", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setVuelos(res.data);
+      showAlert("Vuelo actualizado correctamente.", "success");
+      closeEditModal();
+    } catch {
+      showAlert("Error al actualizar el vuelo.", "danger");
+    }
+  };
+
   const logOutUser = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("role");
     navigate("/Visitor");
   };
-
-  const viewInscribedFlights = () => navigate("/vuelos_inscritos");
+  const viewMyInscriptions = () => navigate("/vuelos_inscritos");
+  const goToAboutUs = () => navigate("/SobreNosotros");
+  const viewSchedule = () => navigate("/horarios");
 
   if (loading) return <p>Cargando horarios…</p>;
   if (error) return <p>Error al cargar: {error.message}</p>;
 
   return (
     <>
-      <header className="navbar fixed-top">
-        <div className="navbar-left" onClick={() => navigate("/user/visitor_user")}>
-          <img
-            src="/Fotos/Parapente_logo.png"
-            alt="SkyRush Logo"
-            className="logo-navbar"
-          />
-          <span className="navbar-brand">SkyRush</span>
-        </div>
-        <div className="navbar-right">
-          {userRole === "publico" && (
+      {/* NAVBAR */}
+      <header className="navbar navbar-expand-lg fixed-top custom-navbar shadow">
+        <div className="container-fluid d-flex justify-content-between align-items-center">
+          <div
+            className="d-flex align-items-center"
+            style={{ cursor: "pointer", textDecoration: "none" }}
+            onClick={() => navigate("/user/visitor_user")}
+          >
+            <img
+              src="/Fotos/Parapente_logo.png"
+              alt="SkyRush Logo"
+              className="logo-navbar"
+            />
+            <span className="navbar-brand text-white fw-bold ms-2">
+              SkyRush
+            </span>
+          </div>
+          <div className="dropdown">
             <button
-              className="btn btn-light me-2"
-              onClick={viewInscribedFlights}
+              className="btn custom-toggle-btn"
+              type="button"
+              id="userMenuButton"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
             >
-              Mis Vuelos
+              <div className="hamburger-icon">
+                <div></div>
+                <div></div>
+                <div></div>
+              </div>
             </button>
-          )}
-          <button className="btn btn-light" onClick={logOutUser}>
-            Cerrar Sesión
-          </button>
+            <ul
+              className="dropdown-menu dropdown-menu-end shadow"
+              aria-labelledby="userMenuButton"
+            >
+              <li>
+                <button
+                  className="dropdown-item"
+                  onClick={() => navigate("/perfil")}
+                >
+                  Ver Perfil
+                </button>
+              </li>
+              <li>
+                <button className="dropdown-item" onClick={viewSchedule}>
+                  Ver Horario
+                </button>
+              </li>
+              <li>
+                <button className="dropdown-item" onClick={viewMyInscriptions}>
+                  Mis Vuelos
+                </button>
+              </li>
+              <li>
+                <button className="dropdown-item" onClick={goToAboutUs}>
+                  Más Información
+                </button>
+              </li>
+              <li>
+                <hr className="dropdown-divider" />
+              </li>
+              <li>
+                <button
+                  className="dropdown-item text-danger fw-semibold"
+                  onClick={logOutUser}
+                >
+                  Cerrar Sesión
+                </button>
+              </li>
+            </ul>
+          </div>
         </div>
       </header>
 
       <div className="horarios-container">
+        {/* Formulario para crear vuelo solo visible para instructores */}
         {userRole === "instructor" && (
           <aside className="panel-formulario">
             {alert.show && (
@@ -157,7 +256,10 @@ export default function Horarios() {
                 placeholder="Lugar de llegada"
                 value={nuevoVuelo.lugar_llegada}
                 onChange={(e) =>
-                  setNuevoVuelo({ ...nuevoVuelo, lugar_llegada: e.target.value })
+                  setNuevoVuelo({
+                    ...nuevoVuelo,
+                    lugar_llegada: e.target.value,
+                  })
                 }
                 required
               />
@@ -206,27 +308,26 @@ export default function Horarios() {
           </aside>
         )}
 
+        {/* Lista de vuelos */}
         <section className="panel-lista">
-          {userRole !== "instructor" && alert.show && (
+          {alert.show && (
             <Alert variant={alert.variant} className="alert-fixed">
               {alert.message}
             </Alert>
           )}
-          <h2 className="titulo-centrado">Horarios de Vuelos</h2>
+          <h2 className="titulo-centrado">Horarios de Vuelos en Parapente</h2>
           <div className="vuelos-list">
             {vuelos.map((v) => (
               <div key={v.id} className="vuelo-card">
                 <p>
-                  <strong>
-                    {new Date(v.fecha_disponible || v.fecha).toLocaleDateString()}
-                  </strong>{" "}
-                  de {v.lugar_salida} a {v.lugar_llegada}
+                  <strong>Vuelo en Parapente: </strong>
+                  {new Date(v.fecha_disponible || v.fecha).toLocaleDateString()} de {v.lugar_salida} a {v.lugar_llegada}
                 </p>
                 <p>
                   Hora: {v.hora} | Cupos: {v.cupos}
                 </p>
                 <p>
-                  <strong>Importante:</strong> {v.comentario}
+                  <strong>Comentario del instructor:</strong> {v.comentario}
                 </p>
                 {userRole === "publico" && (
                   <button
@@ -237,12 +338,20 @@ export default function Horarios() {
                   </button>
                 )}
                 {userRole === "administrador" && (
-                  <button
-                    className="btn btn-orange"
-                    onClick={() => eliminarVuelo(v.id)}
-                  >
-                    Eliminar Vuelo
-                  </button>
+                  <>
+                    <button
+                      className="btn btn-secondary me-2"
+                      onClick={() => openEditModal(v)}
+                    >
+                      Editar
+                    </button>
+                    <button
+                      className="btn btn-orange"
+                      onClick={() => eliminarVuelo(v.id)}
+                    >
+                      Eliminar Vuelo
+                    </button>
+                  </>
                 )}
               </div>
             ))}
@@ -250,12 +359,79 @@ export default function Horarios() {
         </section>
       </div>
 
-      <footer className="footer-container">
-        <div className="footer-content">
-          <p>SkyRush © 2023 - Todos los derechos reservados</p>
-          <p>Contacto: info@skyrush.com | Teléfono: +123 456 789</p>
-        </div>
-      </footer>
+      {/* Modal para editar vuelo */}
+      <Modal show={showEditModal} onHide={closeEditModal}>
+        <Form onSubmit={submitEdit}>
+          <Modal.Header closeButton>
+            <Modal.Title>Editar Vuelo</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form.Group className="mb-2">
+              <Form.Label>Lugar de salida</Form.Label>
+              <Form.Control
+                name="lugar_salida"
+                value={editVuelo?.lugar_salida || ""}
+                onChange={handleEditChange}
+              />
+            </Form.Group>
+            <Form.Group className="mb-2">
+              <Form.Label>Lugar de llegada</Form.Label>
+              <Form.Control
+                name="lugar_llegada"
+                value={editVuelo?.lugar_llegada || ""}
+                onChange={handleEditChange}
+              />
+            </Form.Group>
+            <Form.Group className="mb-2">
+              <Form.Label>Fecha</Form.Label>
+              <Form.Control
+                type="date"
+                name="fecha"
+                value={editVuelo?.fecha || ""}
+                onChange={handleEditChange}
+              />
+            </Form.Group>
+            <Form.Group className="mb-2">
+              <Form.Label>Hora</Form.Label>
+              <Form.Control
+                type="time"
+                name="hora"
+                value={editVuelo?.hora || ""}
+                onChange={handleEditChange}
+              />
+            </Form.Group>
+            <Form.Group className="mb-2">
+              <Form.Label>Cupos</Form.Label>
+              <Form.Control
+                type="number"
+                name="cupos"
+                value={editVuelo?.cupos || 0}
+                onChange={handleEditChange}
+              />
+            </Form.Group>
+            <Form.Group className="mb-2">
+              <Form.Label>Comentario</Form.Label>
+              <Form.Control
+                as="textarea"
+                rows={3}
+                name="comentario"
+                value={editVuelo?.comentario || ""}
+                onChange={handleEditChange}
+              />
+            </Form.Group>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={closeEditModal}>
+              Cancelar
+            </Button>
+            <Button type="submit" variant="primary">
+              Guardar cambios
+            </Button>
+          </Modal.Footer>
+        </Form>
+      </Modal>
+
+      <Footer />
     </>
   );
 }

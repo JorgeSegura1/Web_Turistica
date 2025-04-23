@@ -1,11 +1,8 @@
 .perfil-container {
-  background-color: white;
-  min-height: 100vh; /* Ocupa toda la altura de la pantalla */
-  width: 100%; /* Ocupa todo el ancho de la pantalla */
+  background-color: #f8f9fa;
   padding: 30px;
-  box-sizing: border-box;
-  border-radius: 0; /* Elimina bordes redondeados */
-  box-shadow: none; /* Elimina sombras */
+  border-radius: 15px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
 .perfil-container h3 {

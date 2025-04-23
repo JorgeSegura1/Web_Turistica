@@ -5,12 +5,12 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    background-color: white;
+    background-color: rgb(255, 255, 255);
   }
   
   /* Sección informativa */
   .visitor-info-section {
-    margin-top: 1200px;
+    margin-top: 1000px;
   }
   
   .visitor-info-section p {
@@ -80,3 +80,53 @@
     text-decoration: underline;
     color: inherit;
   }
+  .custom-toggle-btn {
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+    padding: 5px;
+  }
+  
+  .custom-toggle-btn:focus {
+    outline: none;
+    box-shadow: none;
+  }
+  
+  .hamburger-icon div {
+    width: 25px;
+    height: 3px;
+    background-color: white;
+    margin: 4px 0;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+  }
+  
+  /* Mejora el menú desplegable */
+  .dropdown-menu {
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  
+  
+  
+  .dropdown-item.text-danger:hover {
+    background-color: #ffcccc;
+  }
+  
+  /* Animación para desplegar el menú */
+  @keyframes fadeSlideDown {
+    0% {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .dropdown-menu {
+    animation: fadeSlideDown 0.5s ease forwards;
+    transform-origin: top right;
+  }
+  

@@ -7,6 +7,6 @@ const pool = mysql.createPool({
   database: 'parapente_db'
 });
 
-const promisePool = pool.promise(); // <-- Esto ya no da error
+const promisePool = pool.promise();
 
 module.exports = promisePool;

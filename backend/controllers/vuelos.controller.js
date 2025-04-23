@@ -57,5 +57,35 @@ const deleteVuelo = async (req, res) => {
     res.status(500).json({ msg: 'Error en el servidor.' });
   }
 };
+// Actualizar un vuelo (solo administradores)
+const actualizarVuelo = async (req, res) => {
+  const { rol } = req.user;
+  const { id } = req.params;
+  const { lugar_salida, lugar_llegada, fecha, hora, cupos, comentario } = req.body;
 
-module.exports = { obtenerVuelos, crearVuelo, deleteVuelo };
+  if (rol !== 'administrador') {
+    return res.status(403).json({ msg: 'Solo administradores pueden editar vuelos.' });
+  }
+
+  try {
+    const sql = `
+      UPDATE vuelos
+      SET lugar_salida = ?, lugar_llegada = ?, fecha = ?, hora = ?, cupos = ?, comentario = ?
+      WHERE id = ?
+    `;
+    const [result] = await db.query(sql, [
+      lugar_salida, lugar_llegada, fecha, hora, cupos, comentario, id
+    ]);
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ msg: 'Vuelo no encontrado.' });
+    }
+
+    res.json({ msg: 'Vuelo actualizado correctamente.' });
+  } catch (error) {
+    console.error('Error al actualizar vuelo:', error);
+    res.status(500).json({ msg: 'Error en el servidor.' });
+  }
+};
+
+module.exports = { obtenerVuelos, crearVuelo, deleteVuelo, actualizarVuelo, };

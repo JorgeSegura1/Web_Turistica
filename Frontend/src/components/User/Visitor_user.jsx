@@ -2,10 +2,9 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../User/Visitor-user.css";
-import CommentForm from '../CommentForm';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
-import Footer from "./Footer"; // Ruta actualizada
+import Footer from "./Footer";
 
 function Visitor_user() {
   const navigate = useNavigate();
@@ -44,9 +43,12 @@ function Visitor_user() {
     navigate("/Visitor");
   };
 
-  // Asumí que tienes una ruta /sobre-nosotros en tu App.js
   const goToAboutUs = () => {
     navigate("/SobreNosotros");
+  };
+
+  const viewMyFlights = () => {
+    navigate("/vuelos_inscritos");  // Ruta que llevaría a la vista de "Mis Vuelos"
   };
 
   return (
@@ -57,30 +59,71 @@ function Visitor_user() {
           <div
             className="d-flex align-items-center"
             style={{ cursor: "pointer", textDecoration: "none" }}
-            onClick={() => navigate("/visitor")}
+            onClick={() => navigate("/user/visitor_user")}
           >
             <img
               src="/Fotos/Parapente_logo.png"
               alt="SkyRush Logo"
               className="logo-navbar"
             />
-            <span className="navbar-brand text-white fw-bold ms-2">SkyRush</span>
+            <span className="navbar-brand text-white fw-bold ms-2">
+              SkyRush
+            </span>
           </div>
-          <div>
-            {userToken ? (
-              <button className="btn btn-light" onClick={logOutUser}>
-                Cerrar Sesión
-              </button>
-            ) : (
-              <>
-                <button className="btn btn-light me-2" onClick={goToLogin}>
-                  Iniciar Sesión
+
+          <div className="dropdown">
+            <button
+              className="btn custom-toggle-btn"
+              type="button"
+              id="userMenuButton"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <div className="hamburger-icon">
+                <div></div>
+                <div></div>
+                <div></div>
+              </div>
+            </button>
+            <ul
+              className="dropdown-menu dropdown-menu-end shadow"
+              aria-labelledby="userMenuButton"
+            >
+              <li>
+                <button
+                  className="dropdown-item"
+                  onClick={() => navigate("/perfil")}
+                >
+                  Ver Perfil
                 </button>
-                <button className="btn btn-light" onClick={goToRegister}>
-                  Registrarse
+              </li>
+              <li>
+                <button className="dropdown-item" onClick={viewSchedule}>
+                  Ver Horario
                 </button>
-              </>
-            )}
+              </li>
+              <li>
+                <button className="dropdown-item" onClick={viewMyFlights}>
+                  Mis Vuelos
+                </button>
+              </li>
+              <li>
+                <button className="dropdown-item" onClick={goToAboutUs}>
+                  Más Información
+                </button>
+              </li>
+              <li>
+                <hr className="dropdown-divider" />
+              </li>
+              <li>
+                <button
+                  className="dropdown-item text-danger fw-semibold"
+                  onClick={logOutUser}
+                >
+                  Cerrar Sesión
+                </button>
+              </li>
+            </ul>
           </div>
         </div>
       </header>
@@ -201,13 +244,6 @@ function Visitor_user() {
               Ver horarios
             </button>
           </div>
-        </div>
-      </section>
-      {/* ===> Sección de comentarios (solo instructores verán el formulario) */}
-      <section className="comments-section py-5" style={{ backgroundColor: "#f8f9fa" }}>
-        <div className="container">
-          <h3 className="mb-4"></h3>
-          <CommentForm />
         </div>
       </section>
 

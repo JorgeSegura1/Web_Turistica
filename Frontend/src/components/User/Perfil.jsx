@@ -5,7 +5,6 @@ import "./Perfil.css";
 
 const Perfil = () => {
   const navigate = useNavigate();
-  const token = localStorage.getItem("token");
 
   const [formData, setFormData] = useState({
     nombre: "",
@@ -19,7 +18,6 @@ const Perfil = () => {
 
   const [imagen, setImagen] = useState("https://cdn-icons-png.flaticon.com/512/847/847969.png");
   const [nuevaImagen, setNuevaImagen] = useState(null);
-  const [imagenAnterior, setImagenAnterior] = useState(imagen);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -30,7 +28,6 @@ const Perfil = () => {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setImagenAnterior(imagen); // Guardamos la imagen actual por si cancela
         setNuevaImagen(reader.result);
       };
       reader.readAsDataURL(file);
@@ -56,7 +53,6 @@ const Perfil = () => {
         setNuevaImagen(null);
         Swal.fire("Actualizado!", "Tu foto de perfil ha sido cambiada.", "success");
       } else {
-        // Si cancela, volvemos a la imagen anterior
         setNuevaImagen(null);
         Swal.fire("Cancelado", "Tu foto de perfil no fue cambiada.", "info");
       }
@@ -66,40 +62,32 @@ const Perfil = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Datos actualizados:", formData);
+    Swal.fire("Guardado", "Tus datos han sido actualizados.", "success");
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    navigate("/login");
+  const handleReset = () => {
+    setFormData({
+      nombre: "",
+      apellido: "",
+      email: "",
+      password: "",
+      confirmarPassword: "",
+      prefijo: "+57",
+      telefono: "",
+    });
   };
 
   return (
     <div className="container mt-5 perfil-container">
-      {/* Navbar */}
-      <header className="navbar navbar-expand-lg fixed-top custom-navbar shadow">
-        <div className="container-fluid d-flex justify-content-between align-items-center">
-          <div
-            className="d-flex align-items-center"
-            style={{ cursor: "pointer", textDecoration: "none" }}
-            onClick={() => navigate("/visitor")}
-          >
-            <img
-              src="/Fotos/Parapente_logo.png"
-              alt="SkyRush Logo"
-              className="logo-navbar"
-            />
-            <span className="navbar-brand text-white fw-bold ms-2">SkyRush</span>
-          </div>
-
-          <div>
-            {token && (
-              <button className="btn btn-light" onClick={handleLogout}>
-                Cerrar Sesión
-              </button>
-            )}
-          </div>
-        </div>
-      </header>
+      {/* Botón pequeño y naranja para volver */}
+      <div className="mb-4 text-start">
+        <button
+          className="btn btn-sm btn-warning rounded-pill px-3 py-1"
+          onClick={() => navigate("/user/visitor_user")}
+        >
+          ⬅ Volver
+        </button>
+      </div>
 
       <div className="row">
         <div className="col-md-4 text-center mb-4">
@@ -173,7 +161,6 @@ const Perfil = () => {
                   required
                 />
               </div>
-
               <div className="col-md-6">
                 <label>Confirmar Contraseña</label>
                 <input
@@ -220,7 +207,11 @@ const Perfil = () => {
               <button type="submit" className="btn btn-outline-warning me-2">
                 Guardar Cambios
               </button>
-              <button type="reset" className="btn btn-outline-danger">
+              <button
+                type="button"
+                className="btn btn-outline-danger"
+                onClick={handleReset}
+              >
                 Cancelar
               </button>
             </div>
