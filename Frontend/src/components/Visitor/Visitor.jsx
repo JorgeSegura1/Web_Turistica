@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import "../Visitor/style/visitor.css";
+import "../Visitor/style/Visitor.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import Footer from "../User/Footer"; // Ruta actualizada
